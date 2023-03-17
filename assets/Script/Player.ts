@@ -35,7 +35,8 @@ export default class Player extends cc.Component
     onLoad()
     {
         // ===================== TODO =====================
-        // 1. Use "this.anim" to record Animation component
+        // 1. Use "this.anim" to record Animation 
+        this.anim=this.getComponent(cc.Animation);
         // ================================================
 
         cc.director.getCollisionManager().enabled = true;
@@ -161,8 +162,10 @@ export default class Player extends cc.Component
                 this.node.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 0);
 
                 // ===================== TODO =====================
-                // 1. reset the player's position to (-192, 255)
+                // 1. reset the player's position to (-192, 255)                
+                this.node.setPosition(-192,255);
                 // 2. play reborn animation and use "this.animateState" to record animation state
+                this.animateState=this.anim.play("reborn");
                 // 3. register a callback function when reborn animation finish, and set the value of this.isDead to false in the callback function
                 // ================================================
 
@@ -182,6 +185,7 @@ export default class Player extends cc.Component
             }
             else if(this.zDown || this.xDown)
             {
+                // console.log(this.animateState)
                 if(this.animateState == null || this.animateState.name != 'move') // when first call or last animation is not move
                     this.animateState = this.anim.play('move');
             }
@@ -202,6 +206,7 @@ export default class Player extends cc.Component
 
         // ===================== TODO =====================
         // 1. set the linearVelocity of RigidBody to (0, 1500)
+            this.node.getComponent(cc.RigidBody).linearVelocity=cc.v2(0,1500);
         // ================================================
     }
 
@@ -228,6 +233,13 @@ export default class Player extends cc.Component
         // and do step2 and step3 when the condition is true
         // 2. set the value of this.onGround to true
         // 3. check if jump animation still playing, if yes, stop it and play idle animation 
+        if(otherCollider.tag==1){
+            if(!this.anim.getAnimationState("jump").isPlaying)this.onGround=true;
+        }
         // ================================================
+    }
+
+    reborn(){
+        this.isDead=false;
     }
 }
